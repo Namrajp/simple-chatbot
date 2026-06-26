@@ -7,10 +7,12 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 import { reviewCode } from "./code_reviewer.js";
+import { runCustomerSupportChatbot } from "./customer-support-chatbot.js";
 import { summarizeTicket } from "./helpdesk_ticket_summarizer.js";
 import { improveResume } from "./resume_improver.js";
 import { summarizeText } from "./summarizer.js";
 import { translateToNepali } from "./translator.js";
+import { runWebsiteAssistant } from "./website-AI-assistant.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,7 +26,9 @@ const handlers = {
   ticket: summarizeTicket,
   resume: improveResume,
   review: reviewCode,
+  support: runCustomerSupportChatbot,
   translate: translateToNepali,
+  website: runWebsiteAssistant,
   summary: summarizeText,
 };
 app.use(express.json({ limit: "1mb" }));
@@ -43,7 +47,8 @@ app.post("/api/chat", async (req, res) => {
 
   if (typeof mode !== "string" || !handlers[mode]) {
     return res.status(400).json({
-      error: "Choose a valid mode: ticket, resume, review, translate, or summary.",
+      error:
+        "Choose a valid mode: ticket, resume, review, support, translate, website, or summary.",
     });
   }
 

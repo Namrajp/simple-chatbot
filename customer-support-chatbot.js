@@ -1,19 +1,15 @@
-import OpenAI from "openai";
-import 'dotenv/config';
+export async function runCustomerSupportChatbot(message, client) {
+  const response = await client.responses.create({
+    model: "gpt-5-mini",
+    input: `
+You are a helpful customer support assistant.
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const response = await client.responses.create({
-  model: "gpt-5-mini",
-  input: `
-You are a customer support assistant.
+Respond with empathy, ask for missing details when needed, and provide clear next steps.
 
 User:
-I ordered a laptop two weeks ago and it still hasn't arrived.
+${message}
 `,
-});
+  });
 
-console.log(response.output_text);
-
+  return response.output_text;
+}
